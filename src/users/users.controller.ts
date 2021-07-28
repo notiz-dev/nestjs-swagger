@@ -10,7 +10,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 
 @Controller('users')
@@ -19,32 +19,27 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ApiCreatedResponse({ type: User })
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body() createUserDto: CreateUserDto): User {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
-  @ApiOkResponse({ type: [User] })
-  findAll() {
+  findAll(): User[] {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: User })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): User {
     return this.usersService.findOne(+id);
   }
 
   @Patch(':id')
-  @ApiCreatedResponse({ type: User })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): User {
     return this.usersService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
-  @ApiOkResponse({ type: User })
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): User {
     return this.usersService.remove(+id);
   }
 }
