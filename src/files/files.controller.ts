@@ -4,6 +4,7 @@ import { ApiFileFields } from './api-file-fields.decorator';
 import { ApiFile } from './api-file.decorator';
 import { ApiFiles } from './api-files.decorator';
 import { FilesService } from './files.service';
+import { ParseFile } from './parse-file.pipe';
 
 @Controller('files')
 @ApiTags('files')
@@ -11,14 +12,14 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post('upload')
-  @ApiFile('avatar', false)
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  @ApiFile('avatar', true)
+  uploadFile(@UploadedFile(ParseFile) file: Express.Multer.File) {
     console.log(file);
   }
 
   @Post('uploads')
   @ApiFiles('files', true)
-  uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
+  uploadFiles(@UploadedFiles(ParseFile) files: Array<Express.Multer.File>) {
     console.log(files);
   }
 
