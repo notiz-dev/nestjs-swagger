@@ -11,6 +11,7 @@ import {
 } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ApiFile } from './api-file.decorator';
+import { ApiFiles } from './api-files.decorator';
 import { FilesService } from './files.service';
 
 @Controller('files')
@@ -25,22 +26,7 @@ export class FilesController {
   }
 
   @Post('uploads')
-  @UseInterceptors(FilesInterceptor('files'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        files: {
-          type: 'array',
-          items: {
-            type: 'string',
-            format: 'binary',
-          },
-        },
-      },
-    },
-  })
+  @ApiFiles('files', true)
   uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
     console.log(files);
   }
