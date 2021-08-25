@@ -1,7 +1,7 @@
 import { Controller, Post, UploadedFile, UploadedFiles } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiFileFields } from './api-file-fields.decorator';
-import { ApiFile } from './api-file.decorator';
+import { ApiFile, ApiImageFile, ApiPdfFile } from './api-file.decorator';
 import { ApiFiles } from './api-files.decorator';
 import { FilesService } from './files.service';
 import { ParseFile } from './parse-file.pipe';
@@ -12,9 +12,15 @@ import { fileMimetypeFilter } from './file-mimetype-filter';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @Post('upload')
-  @ApiFile('avatar', true, { fileFilter: fileMimetypeFilter('image') })
-  uploadFile(@UploadedFile(ParseFile) file: Express.Multer.File) {
+  @Post('avatar')
+  @ApiImageFile('avatar', true)
+  uploadAvatar(@UploadedFile(ParseFile) file: Express.Multer.File) {
+    console.log(file);
+  }
+  
+  @Post('document')
+  @ApiPdfFile('document', true)
+  uploadDocument(@UploadedFile(ParseFile) file: Express.Multer.File) {
     console.log(file);
   }
 
