@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import {
   FileFieldsInterceptor,
-  FileInterceptor,
   FilesInterceptor,
 } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -20,7 +19,7 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post('upload')
-  @ApiFile()
+  @ApiFile('avatar', false)
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
   }

@@ -5,6 +5,7 @@ import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 
 export function ApiFile(
   fieldName: string = 'files',
+  required: boolean = false,
   localOptions?: MulterOptions,
 ) {
   return applyDecorators(
@@ -13,6 +14,7 @@ export function ApiFile(
     ApiBody({
       schema: {
         type: 'object',
+        required: required ? [fieldName] : [],
         properties: {
           [fieldName]: {
             type: 'string',
