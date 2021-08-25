@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Post,
-  UploadedFile,
-  UploadedFiles,
-  UseInterceptors,
-} from '@nestjs/common';
-import {
-  FileFieldsInterceptor,
-  FilesInterceptor,
-} from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { Controller, Post, UploadedFile, UploadedFiles } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { ApiFileFields } from './api-file-fields.decorator';
 import { ApiFile } from './api-file.decorator';
 import { ApiFiles } from './api-files.decorator';
 import { FilesService } from './files.service';
@@ -32,28 +23,10 @@ export class FilesController {
   }
 
   @Post('uploadFields')
-  @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'avatar', maxCount: 1 },
-      { name: 'background', maxCount: 1 },
-    ]),
-  )
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        avatar: {
-          type: 'string',
-          format: 'binary',
-        },
-        background: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
+  @ApiFileFields([
+    { name: 'avatar', maxCount: 1, required: true },
+    { name: 'background', maxCount: 1 },
+  ])
   uploadMultipleFiles(@UploadedFiles() files: Express.Multer.File[]) {
     console.log(files);
   }
