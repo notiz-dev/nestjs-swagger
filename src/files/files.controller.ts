@@ -5,6 +5,7 @@ import { ApiFile } from './api-file.decorator';
 import { ApiFiles } from './api-files.decorator';
 import { FilesService } from './files.service';
 import { ParseFile } from './parse-file.pipe';
+import { fileMimetypeFilter } from './file-mimetype-filter';
 
 @Controller('files')
 @ApiTags('files')
@@ -12,7 +13,7 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post('upload')
-  @ApiFile('avatar', true)
+  @ApiFile('avatar', true, { fileFilter: fileMimetypeFilter('image') })
   uploadFile(@UploadedFile(ParseFile) file: Express.Multer.File) {
     console.log(file);
   }
