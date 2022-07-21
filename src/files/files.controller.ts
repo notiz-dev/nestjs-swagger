@@ -8,7 +8,7 @@ import { ParseFile } from './parse-file.pipe';
 import { fileMimetypeFilter } from './file-mimetype-filter';
 
 @Controller('files')
-@ApiTags('files')
+@ApiTags('upload')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
