@@ -19,12 +19,15 @@ export class DownloadController {
   @Get('buffer')
   buffer(@Res() response: Response) {
     const file = this.downloadService.imageBuffer();
+    response.contentType('png');
+    response.attachment('notiz.png');
     response.send(file);
   }
 
   @Get('stream')
   stream(@Res() response: Response) {
     const file = this.downloadService.imageStream();
+    response.contentType('png');
     file.pipe(response);
   }
 
@@ -33,6 +36,8 @@ export class DownloadController {
     const file = this.downloadService.fileStream();
     // or
     // const file = this.downloadService.fileBuffer();
+    response.contentType('application/json');
+    response.attachment('package.json');
     return new StreamableFile(file); // 👈 supports Buffer and Stream
   }
 }
