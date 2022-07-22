@@ -1,14 +1,21 @@
 import {
   Controller,
   Get,
+  HttpStatus,
   Res,
   StreamableFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiProduces,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { DownloadService } from './download.service';
 import { Response } from 'express';
 import { LoggingInterceptor } from 'src/logging.interceptor';
+import { ApiFileResponse } from './api-file-response.decorator';
 
 @UseInterceptors(LoggingInterceptor)
 @Controller('download')
@@ -16,6 +23,7 @@ import { LoggingInterceptor } from 'src/logging.interceptor';
 export class DownloadController {
   constructor(private readonly downloadService: DownloadService) {}
 
+  @ApiFileResponse('image/png')
   @Get('buffer')
   buffer(@Res() response: Response) {
     const file = this.downloadService.imageBuffer();
@@ -24,6 +32,12 @@ export class DownloadController {
     response.send(file);
   }
 
+  @ApiResponse({
+    schema: {
+      type: 'string',
+      format: 'binary',
+    },
+  })
   @Get('stream')
   stream(@Res() response: Response) {
     const file = this.downloadService.imageStream();
@@ -31,6 +45,13 @@ export class DownloadController {
     file.pipe(response);
   }
 
+  @ApiOkResponse({
+    schema: {
+      type: 'string',
+      format: 'binary',
+    },
+  })
+  @ApiProduces('application/json')
   @Get('streamable')
   streamable(@Res({ passthrough: true }) response: Response) {
     const file = this.downloadService.fileStream();
